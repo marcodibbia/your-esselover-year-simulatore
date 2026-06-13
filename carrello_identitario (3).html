@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Il Carrello Identitario — Your EsseLover Year</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  font-family:'DM Sans',sans-serif;
+  background:#fff;
+  color:#111;
+  min-height:100vh;
+}
+
+.hero{
+  border-bottom:1px solid #111;
+  padding:5rem 2rem 3.5rem;
+}
+
+.hero-inner{
+  max-width:760px;
+  margin:0 auto;
+}
+
+.eyebrow{
+  font-size:11px;
+  font-weight:500;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:#888;
+  margin-bottom:1.5rem;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.eyebrow::before{
+  content:'';
+  display:block;
+  width:24px;
+  height:1px;
+  background:#888;
+}
+
+.hero h1{
+  font-family:'DM Serif Display',serif;
+  font-size:clamp(36px,6vw,72px);
+  font-weight:400;
+  line-height:1.05;
+  letter-spacing:-.02em;
+  color:#111;
+  margin-bottom:1.5rem;
+}
+
+.hero h1 em{
+  font-style:italic;
+  color:#555;
+}
+
+.hero-desc{
+  font-size:16px;
+  font-weight:300;
+  color:#555;
+  line-height:1.7;
+  max-width:520px;
+}
+
+.main{
+  max-width:760px;
+  margin:0 auto;
+  padding:0 2rem 5rem;
+}
+
+.section-row{
+  display:grid;
+  grid-template-columns:180px 1fr;
+  gap:2rem;
+  border-bottom:1px solid #e5e5e5;
+  padding:2.5rem 0;
+  align-items:start;
+}
+
+@media(max-width:560px){
+  .section-row{grid-template-columns:1fr}
+}
+
+.section-num{
+  font-size:11px;
+  color:#bbb;
+  letter-spacing:.1em;
+  display:block;
+  margin-bottom:.4rem;
+}
+
+.section-title{
+  font-size:13px;
+  font-weight:500;
+  color:#111;
+  line-height:1.4;
+}
+
+.chip-grid{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+}
+
+.chip{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:7px 14px;
+  border:1px solid #ddd;
+  border-radius:2px;
+  font-size:13px;
+  font-weight:400;
+  color:#555;
+  cursor:pointer;
+  transition:all .12s;
+  user-select:none;
+  background:#fff;
+}
+
+.chip:hover{border-color:#111;color:#111}
+
+.chip.active{background:#111;border-color:#111;color:#fff}
+
+.chip-check{
+  display:inline-block;
+  width:13px;height:13px;
+  border:1px solid #ccc;
+  border-radius:50%;
+  flex-shrink:0;
+  transition:all .12s;
+  position:relative;
+}
+
+.chip.active .chip-check{background:#fff;border-color:#fff}
+
+.chip.active .chip-check::after{
+  content:'';
+  display:block;
+  width:3px;height:6px;
+  border:1.5px solid #111;
+  border-top:none;border-left:none;
+  transform:rotate(45deg);
+  position:absolute;
+  top:1px;left:4px;
+}
+
+/* slider */
+.slider-wrap{display:flex;flex-direction:column;gap:.5rem}
+.slider-row{display:flex;align-items:center;gap:14px}
+.slider-row label{font-size:13px;color:#555;width:180px;flex-shrink:0}
+input[type=range]{
+  -webkit-appearance:none;
+  width:100%;height:4px;
+  background:#e5e5e5;
+  border-radius:99px;
+  outline:none;
+  cursor:pointer;
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;
+  width:16px;height:16px;
+  border-radius:50%;
+  background:#111;
+  cursor:pointer;
+}
+.slider-val{
+  font-size:13px;
+  font-weight:500;
+  width:32px;
+  text-align:right;
+  flex-shrink:0;
+}
+
+hr.div{border:none;border-top:1px solid #e5e5e5;margin:0}
+
+.cta-row{
+  padding:2.5rem 0;
+  display:flex;
+  align-items:center;
+  gap:1.5rem;
+}
+
+.btn-main{
+  font-family:'DM Sans',sans-serif;
+  font-size:13px;font-weight:500;
+  letter-spacing:.04em;
+  padding:11px 28px;
+  background:#111;color:#fff;
+  border:1px solid #111;
+  border-radius:2px;
+  cursor:pointer;
+  transition:opacity .12s;
+}
+
+.btn-main:hover{opacity:.8}
+
+/* ── RECAP CARD ── */
+#recap-section{display:none;margin-top:0}
+
+.recap-divider{border:none;border-top:1px solid #111;margin:0}
+
+/* card */
+.recap-card{
+  margin:2.5rem 0;
+  border:1px solid #111;
+  padding:2.5rem;
+  position:relative;
+}
+
+.rc-eyebrow{
+  font-size:10px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:#bbb;
+  margin-bottom:1.5rem;
+}
+
+.rc-title{
+  font-family:'DM Serif Display',serif;
+  font-size:clamp(22px,4vw,36px);
+  font-weight:400;
+  line-height:1.1;
+  margin-bottom:.5rem;
+}
+
+.rc-title em{font-style:italic;color:#555}
+
+.rc-subtitle{
+  font-size:13px;font-weight:300;color:#777;
+  margin-bottom:2rem;
+}
+
+.rc-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:0;
+  border-top:1px solid #e5e5e5;
+  border-left:1px solid #e5e5e5;
+  margin-bottom:2rem;
+}
+
+@media(max-width:480px){.rc-grid{grid-template-columns:repeat(2,1fr)}}
+
+.rc-stat{
+  padding:1.25rem 1rem;
+  border-right:1px solid #e5e5e5;
+  border-bottom:1px solid #e5e5e5;
+}
+
+.rc-stat-val{
+  font-family:'DM Serif Display',serif;
+  font-size:28px;font-weight:400;
+  display:block;margin-bottom:3px;
+}
+
+.rc-stat-label{
+  font-size:10px;color:#aaa;
+  text-transform:uppercase;letter-spacing:.08em;
+}
+
+.rc-section-label{
+  font-size:10px;font-weight:500;
+  text-transform:uppercase;letter-spacing:.1em;
+  color:#bbb;margin-bottom:.75rem;
+}
+
+.rc-products{
+  display:flex;flex-wrap:wrap;gap:6px;
+  margin-bottom:2rem;
+}
+
+.rc-product-tag{
+  padding:5px 12px;
+  border:1px solid #e5e5e5;
+  border-radius:2px;
+  font-size:12px;color:#555;
+}
+
+.rc-insight{
+  border-top:1px solid #e5e5e5;
+  padding-top:1.5rem;
+}
+
+.rc-insight-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:1.5rem;
+  margin-top:.75rem;
+}
+
+@media(max-width:480px){.rc-insight-grid{grid-template-columns:1fr}}
+
+.rc-insight-item{}
+
+.rc-insight-key{
+  font-size:10px;font-weight:500;
+  text-transform:uppercase;letter-spacing:.08em;
+  color:#bbb;margin-bottom:3px;
+}
+
+.rc-insight-val{
+  font-size:13px;font-weight:500;color:#111;
+}
+
+.rc-insight-sub{
+  font-size:12px;font-weight:300;color:#777;margin-top:1px;
+}
+
+.rc-footer{
+  margin-top:2rem;
+  padding-top:1.5rem;
+  border-top:1px solid #e5e5e5;
+  font-size:11px;font-weight:300;color:#aaa;
+  line-height:1.6;
+}
+
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(8px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+.rc-stat{opacity:0;animation:fadeUp .35s ease forwards}
+.rc-product-tag{opacity:0;animation:fadeUp .35s ease forwards}
+.rc-insight-item{opacity:0;animation:fadeUp .35s ease forwards}
+
+.btn-reset{
+  margin-top:1.5rem;
+  font-family:'DM Sans',sans-serif;
+  font-size:12px;color:#bbb;
+  background:none;border:none;
+  cursor:pointer;padding:0;
+  letter-spacing:.04em;
+}
+
+.btn-reset:hover{color:#111}
+
+footer{
+  border-top:1px solid #e5e5e5;
+  padding:1.5rem 2rem;
+  max-width:760px;
+  margin:0 auto;
+  display:flex;
+  justify-content:space-between;
+  font-size:11px;color:#ccc;letter-spacing:.04em;
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <p class="eyebrow">Il Carrello Identitario</p>
+    <h1>Your<br><em>EsseLover Year</em></h1>
+    <p class="hero-desc">Inserisci le tue abitudini di spesa dell'ultimo anno. Otterrai il recap personalizzato che Esselunga potrebbe mandarti — e scoprirai cosa sa davvero di te.</p>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="section-row">
+    <div class="section-meta">
+      <span class="section-num">01</span>
+      <span class="section-title">Quante volte vai al supermercato</span>
+    </div>
+    <div class="slider-wrap">
+      <div class="slider-row">
+        <label>Volte al mese</label>
+        <input type="range" id="freq" min="1" max="20" value="4" oninput="document.getElementById('freq-val').textContent=this.value">
+        <span class="slider-val" id="freq-val">4</span>
+      </div>
+      <div class="slider-row">
+        <label>Importo medio scontrino (€)</label>
+        <input type="range" id="importo" min="10" max="200" step="5" value="60" oninput="document.getElementById('importo-val').textContent=this.value+'€'">
+        <span class="slider-val" id="importo-val">60€</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-row">
+    <div class="section-meta">
+      <span class="section-num">02</span>
+      <span class="section-title">Categorie che acquisti spesso</span>
+    </div>
+    <div class="chip-grid" id="chips-categorie"></div>
+  </div>
+
+  <div class="section-row">
+    <div class="section-meta">
+      <span class="section-num">03</span>
+      <span class="section-title">Le tue abitudini di acquisto</span>
+    </div>
+    <div class="chip-grid" id="chips-abitudini"></div>
+  </div>
+
+  <hr class="div">
+
+  <div class="cta-row">
+    <button class="btn-main" onclick="generaRecap()">Genera il tuo recap →</button>
+  </div>
+
+  <div id="recap-section">
+    <hr class="recap-divider">
+    <div class="recap-card" id="recap-card"></div>
+    <button class="btn-reset" onclick="resetTool()">↩ Ricomincia</button>
+  </div>
+
+</div>
+
+<footer>
+  <span>Il Carrello Identitario</span>
+  <span>Progetto dimostrativo</span>
+</footer>
+
+<script>
+const CATEGORIE=[
+  {id:"freschissimi",label:"Freschissimi (carne, pesce, latticini)"},
+  {id:"frutta_verdura",label:"Frutta e verdura"},
+  {id:"pane_pasticceria",label:"Pane e pasticceria"},
+  {id:"surgelati",label:"Surgelati"},
+  {id:"dispensa",label:"Dispensa (pasta, riso, scatolame)"},
+  {id:"bio",label:"Prodotti biologici"},
+  {id:"vegano",label:"Prodotti vegani / plant-based"},
+  {id:"senza_glutine",label:"Senza glutine / lattosio"},
+  {id:"bambini",label:"Prodotti per bambini"},
+  {id:"latte_uova",label:"Latte e uova"},
+  {id:"vino_birra",label:"Vino e birra"},
+  {id:"bibite",label:"Bibite e succhi"},
+  {id:"gelati",label:"Gelati"},
+  {id:"snack",label:"Snack e dolci"},
+  {id:"premium",label:"Prodotti premium / gourmet"},
+  {id:"marca_propria",label:"Linea Esselunga / marca propria"},
+  {id:"igiene",label:"Igiene e cura della persona"},
+];
+
+const ABITUDINI=[
+  {id:"promo",label:"Acquisto quasi sempre in promozione"},
+  {id:"lista",label:"Ho sempre una lista fissa"},
+  {id:"mattina",label:"Vado la mattina presto"},
+  {id:"settimana",label:"Faccio la spesa in settimana"},
+  {id:"weekend",label:"Faccio la spesa nel weekend"},
+  {id:"sera",label:"Vado spesso la sera"},
+  {id:"punti",label:"Accumulo punti fragola attivamente"},
+  {id:"app",label:"Uso l'app Esselunga"},
+  {id:"online",label:"Ordino anche online / a domicilio"},
+];
+
+const selected=new Set();
+
+function renderChips(cid,items){
+  const el=document.getElementById(cid);
+  items.forEach(item=>{
+    const c=document.createElement('div');
+    c.className='chip';
+    c.innerHTML=`<span class="chip-check"></span>${item.label}`;
+    c.onclick=()=>{
+      if(selected.has(item.id)){selected.delete(item.id);c.classList.remove('active');}
+      else{selected.add(item.id);c.classList.add('active');}
+    };
+    el.appendChild(c);
+  });
+}
+
+function generaRecap(){
+  const freq=parseInt(document.getElementById('freq').value);
+  const importo=parseInt(document.getElementById('importo').value);
+  const s=selected;
+
+  const visite=freq*12;
+  const spesaTotale=(visite*importo).toLocaleString('it-IT');
+  const puntiBase=Math.round(visite*importo/0.8);
+  const puntiFragola=s.has('punti')?Math.round(puntiBase*0.35):Math.round(puntiBase*0.1);
+  const puntiTotali=(puntiBase+puntiFragola).toLocaleString('it-IT');
+
+  // prodotto simbolo dell'anno
+  const prodottiTop=[];
+  if(s.has('freschissimi'))prodottiTop.push('Bresaola Pura Bresaola Valtellina');
+  if(s.has('frutta_verdura'))prodottiTop.push('Pomodori Cuore di Bue');
+  if(s.has('pane_pasticceria'))prodottiTop.push('Focaccine Esselunga');
+  if(s.has('bio'))prodottiTop.push('Yogurt Bio Esselunga');
+  if(s.has('vegano'))prodottiTop.push('Burger vegetale Heura');
+  if(s.has('senza_glutine'))prodottiTop.push('Pasta senza glutine Esselunga');
+  if(s.has('bambini'))prodottiTop.push('Merenda Kinder Fetta al Latte');
+  if(s.has('vino_birra'))prodottiTop.push('Vino Sangiovese Superiore');
+  if(s.has('snack'))prodottiTop.push('Biscotti Digestive McVitie\'s');
+  if(s.has('premium'))prodottiTop.push('Salmone affumicato scozzese');
+  if(s.has('marca_propria'))prodottiTop.push('Passata di pomodoro Esselunga');
+  if(s.has('dispensa'))prodottiTop.push('Spaghetti n°5 De Cecco');
+  if(s.has('surgelati'))prodottiTop.push('Pizza surgelata Dr. Oetker');
+  if(s.has('igiene'))prodottiTop.push('Shampoo Pantene Pro-V');
+  if(prodottiTop.length===0)prodottiTop.push('Acqua minerale naturale Levissima');
+
+  // insight
+  let profilo='';
+  if(s.has('bambini')&&s.has('freschissimi'))profilo='Famiglia con figli — acquisti freschi e prodotti per bambini ricorrenti ogni settimana.';
+  else if(s.has('bio')&&s.has('frutta_verdura'))profilo='Consumatore attento alla qualità — preferenza marcata per biologico e prodotti freschi.';
+  else if(s.has('marca_propria')&&s.has('promo'))profilo='Acquirente orientato al risparmio — alto utilizzo della linea Esselunga e acquisti in promozione.';
+  else if(s.has('premium')&&s.has('vino_birra'))profilo='Profilo gourmet — selezione ricorrente di prodotti premium e vini.';
+  else if(s.has('vegano')||s.has('senza_glutine'))profilo='Dieta specifica — acquisti coerenti con un regime alimentare preciso.';
+  else profilo='Profilo bilanciato — mix di categorie senza una preferenza dominante.';
+
+  let orario='';
+  if(s.has('mattina'))orario='Mattina presto — probabilmente prima del lavoro o della scuola.';
+  else if(s.has('sera'))orario='Sera — probabilmente dopo il lavoro o la scuola.';
+  else if(s.has('weekend'))orario='Weekend — spesa concentrata in un\'unica uscita.';
+  else if(s.has('settimana'))orario='Infrasettimanale — abitudine distribuita durante la settimana.';
+  else if(freq>=12)orario='Frequente — più volte a settimana, acquisti ravvicinati.';
+  else if(freq>=5)orario='Regolare — circa una volta a settimana.';
+  else orario='Occasionale — poche volte al mese, spesa concentrata.';
+
+  let sensibilità='';
+  if(s.has('promo')&&s.has('marca_propria'))sensibilità='Alta — reagisce regolarmente alle promozioni e preferisce la marca del supermercato.';
+  else if(s.has('premium')&&!s.has('promo'))sensibilità='Bassa — acquista a prezzo pieno senza condizionamenti promozionali.';
+  else if(s.has('punti'))sensibilità='Media-alta — attivo nel programma punti, coinvolto nelle iniziative fedeltà.';
+  else sensibilità='Media — occasionalmente influenzato da offerte e promozioni.';
+
+  let composizione='';
+  if(s.has('bambini'))composizione='Nucleo familiare con minori.';
+  else if(s.has('vino_birra')&&s.has('premium')&&importo>80)composizione='Coppia o adulto senza figli, alta capacità di spesa.';
+  else if(importo<30&&freq<=2)composizione='Probabilmente single o coppia giovane.';
+  else composizione='Nucleo adulto, composizione non determinata con certezza.';
+
+  const card=document.getElementById('recap-card');
+  card.innerHTML=`
+    <p class="rc-eyebrow">Your EsseLover Year · ${new Date().getFullYear()}</p>
+    <h2 class="rc-title">Il tuo anno<br><em>di spesa</em></h2>
+    <p class="rc-subtitle">Ecco cosa abbiamo imparato su di te quest'anno.</p>
+
+    <div class="rc-grid">
+      <div class="rc-stat" style="animation-delay:0ms">
+        <span class="rc-stat-val">${visite}</span>
+        <span class="rc-stat-label">Visite in negozio</span>
+      </div>
+      <div class="rc-stat" style="animation-delay:80ms">
+        <span class="rc-stat-val">€${spesaTotale}</span>
+        <span class="rc-stat-label">Spesa totale stimata</span>
+      </div>
+      <div class="rc-stat" style="animation-delay:160ms">
+        <span class="rc-stat-val">${puntiTotali}</span>
+        <span class="rc-stat-label">Punti Fìdaty accumulati</span>
+      </div>
+    </div>
+
+    <p class="rc-section-label">I tuoi prodotti più acquistati</p>
+    <div class="rc-products">
+      ${prodottiTop.slice(0,5).map((p,i)=>`<span class="rc-product-tag" style="animation-delay:${i*60}ms">${p}</span>`).join('')}
+    </div>
+    <p style="font-size:11px;color:#aaa;font-weight:300;margin-top:.6rem;margin-bottom:2rem;line-height:1.6">
+      Nota: i prodotti mostrati sono esempi rappresentativi delle categorie selezionate, non i tuoi acquisti reali. Esselunga conosce invece il prodotto esatto, la marca, il formato e la frequenza di ogni singolo acquisto registrato dalla tua carta.
+    </p>
+
+    <div class="rc-insight">
+      <p class="rc-section-label">Quello che sappiamo di te</p>
+      <div class="rc-insight-grid">
+        <div class="rc-insight-item" style="animation-delay:200ms">
+          <div class="rc-insight-key">Profilo di consumo</div>
+          <div class="rc-insight-val">${profilo.split('—')[0]}</div>
+          <div class="rc-insight-sub">${profilo.split('—')[1]||''}</div>
+        </div>
+        <div class="rc-insight-item" style="animation-delay:270ms">
+          <div class="rc-insight-key">Composizione stimata del nucleo</div>
+          <div class="rc-insight-val">${composizione}</div>
+        </div>
+        <div class="rc-insight-item" style="animation-delay:340ms">
+          <div class="rc-insight-key">Abitudine di visita</div>
+          <div class="rc-insight-val">${orario.split('—')[0]}</div>
+          <div class="rc-insight-sub">${orario.split('—')[1]||''}</div>
+        </div>
+        <div class="rc-insight-item" style="animation-delay:410ms">
+          <div class="rc-insight-key">Sensibilità alle promozioni</div>
+          <div class="rc-insight-val">${sensibilità.split('—')[0]}</div>
+          <div class="rc-insight-sub">${sensibilità.split('—')[1]||''}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rc-footer">
+      Questi dati sono elaborati automaticamente a partire dalla cronologia degli acquisti registrata dalla tua Fìdaty Card. Puoi richiedere l'accesso completo al tuo profilo scrivendo a privacy@esselunga.it ai sensi dell'art. 15 GDPR. Questo è un simulatore dimostrativo — i dati inseriti non vengono salvati né trasmessi.
+    </div>
+  `;
+
+  const ps=document.getElementById('recap-section');
+  ps.style.display='block';
+  ps.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function resetTool(){
+  selected.clear();
+  document.querySelectorAll('.chip.active').forEach(c=>c.classList.remove('active'));
+  document.getElementById('freq').value=4;
+  document.getElementById('freq-val').textContent=4;
+  document.getElementById('importo').value=60;
+  document.getElementById('importo-val').textContent='60€';
+  document.getElementById('recap-section').style.display='none';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+renderChips('chips-categorie',CATEGORIE);
+renderChips('chips-abitudini',ABITUDINI);
+</script>
+</body>
+</html>
